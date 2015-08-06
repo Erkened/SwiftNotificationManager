@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  SwiftNotificationManager
 //
-//  Created by John on 05/08/2015.
+//  Created by John on 16/05/2015.
 //  Copyright (c) 2015 Audio Y. All rights reserved.
 //
 
