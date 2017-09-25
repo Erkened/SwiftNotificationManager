@@ -1,145 +1,112 @@
 //
 //  NotificationManager.swift
-//  SwiftNotificationManager
+//  Repnote
 //
-//  Created by John on 16/05/2015.
-//  Copyright (c) 2015 Audio Y. All rights reserved.
+//  Created by Jonathan Neumann on 31/08/2017.
+//  Copyright © 2017 Audioy. All rights reserved.
 //
 
 import Foundation
 import UIKit
 
+typealias notificationCompletion = () -> ()
+
+enum NotificationType{
+    case normal
+    case loading
+}
+
 class NotificationManager {
     
-    static let sharedInstance = NotificationManager() // Now it's a Singleton
+    static let shared = NotificationManager() // Now it's a Singleton
     
-    let rootViewController: UIViewController = UIApplication.sharedApplication().windows[0].rootViewController!! // The topmost view controller
-    var notificationsToShowArray:NSMutableArray = [] // An array that holds normal notifications that need displaying if we are already displaying one
-    var isExecuting:Bool = false
+    private static let notificationHeight: CGFloat = 80
+    private let serialQueue = DispatchQueue(label: "com.example.serialqueue")
+    private let group = DispatchGroup()
     
-    /*
-    lazy var notificationQueue:NSOperationQueue = {
-        var queue = NSOperationQueue()
-        queue.name = "Notification queue"
-        queue.maxConcurrentOperationCount = 1
-        return queue
-        }()
-    */
-    
-    init(){
-        println("NotificationManager is initialised")
+    private init(){
+        print("NotificationManager is initialised")
     }
     
-    func displayMessage(message:String, type:NotificationType, duration:Double?){
-        
-        // Loading notifications have their own method, displayLoadingMessage
-        if type == .Loading{
-            return
-        }
-        
-        var defaultDuration = 0.8 // The default duration
-        if let duration = duration{
-            defaultDuration = duration // If the value is different from 0.8, e.g. 1.6, pass it as the duration for this view
-        }
-        
-        // If we are already showing a notification, log this one in the notificationsToShowArray array
-        if self.isExecuting{
-            // Log this operation to be executed when done
-            var operationDictionary:[String:AnyObject] = ["message":message, "typeHash":type.rawValue]
-            if let duration = duration{
-                operationDictionary["duration"] = duration
+    // Source: https://stackoverflow.com/questions/27601758/how-to-use-gcd-to-control-animation-sequence
+    // Source: https://www.allaboutswift.com/dev/2016/7/12/gcd-with-swfit3
+    // Source: https://medium.com/@irinaernst/swift-3-0-concurrent-programming-with-gcd-5ee51e89091f
+    
+    func displayMessage(_ message: String, completionHandler: (() -> ())? = nil){
+        display(message, type: .normal) { (_) in
+            if let completionHandler = completionHandler{
+                completionHandler()
             }
-            self.notificationsToShowArray.addObject(operationDictionary)
-            return
         }
-        
-        self.isExecuting = true
-        
-        let notificationView = NotificationView(message: message, type: type)
-        self.rootViewController.view.addSubview(notificationView)
-        
-        // UI updates happen on the main thread
-        dispatch_async(dispatch_get_main_queue(),{
-            
-            UIView.animateWithDuration(0.2, delay: 0.0, options: .CurveEaseOut, animations: {
-                // Bring the notification down
-                notificationView.frame.origin.y = 0
-                }, completion: { finished in
-                    
-                    UIView.animateWithDuration(0.8, delay: defaultDuration, options: .CurveEaseOut, animations: {
-                        // Bring the notification up
-                        notificationView.frame.origin.y -= CGRectGetHeight(notificationView.frame)
-                        }, completion: { finished in
-                            // Remove the notification and declare oneself as free to show another notification
-                            notificationView.removeFromSuperview()
-                            self.isExecuting = false
-                            
-                            // Check if we have any notifications to show in the array
-                            if self.notificationsToShowArray.count > 0{
-                                if let notificationDictionary = self.notificationsToShowArray.firstObject as? [String:AnyObject], notificationMessage:String = notificationDictionary["message"] as? String, notificationTypeValue:Int =  notificationDictionary["typeHash"] as? Int{
-                                    let notificationType:NotificationType = NotificationType(rawValue: notificationTypeValue)!
-                                    self.notificationsToShowArray.removeObject(notificationDictionary)
-                                    self.displayMessage(notificationMessage, type: notificationType, duration: notificationDictionary["duration"] as? Double)
-                                }
-                            }
-                    })
-            })
-        })
-        
     }
     
-    // Display the loading message and return a completionHandler to the calling method so that the loading notification can be removed
-    func displayLoadingMessage(message:String) -> (() -> ())?{
-
+    func displayLoadingMessage(_ message: String, completionHandler: @escaping (@escaping notificationCompletion) -> ()){
         
-        // If we are already showing a notification, log this one in the notificationsToShowArray array
-        if isExecuting{
-            // Log this operation to be executed when done
-            let operationDictionary:[String:AnyObject] = ["message":message, "typeHash":NotificationType.Loading.rawValue]
-            notificationsToShowArray.addObject(operationDictionary)
-            return nil
+        display(message, type: .loading) { (completion) in
+            completionHandler(completion)
         }
+    }
+    
+    private func display(_ message:String, type: NotificationType, completionHandler: @escaping (@escaping notificationCompletion) -> ()){
+        guard let rootViewController = UIApplication.shared.windows.first?.rootViewController else { return print("Couldn't access the root view controller, therefore couldn't display the notification") }
         
-        isExecuting = true
+        let notificationView = NotificationView(message: message)
+        notificationView.translatesAutoresizingMaskIntoConstraints = false
+        let bottomConstraint = notificationView.bottomAnchor.constraint(equalTo: rootViewController.view.topAnchor)
         
-        let notificationView = NotificationView(message: message, type: .Loading)
-        self.rootViewController.view.addSubview(notificationView)
-        
-        dispatch_async(dispatch_get_main_queue(),{
+        serialQueue.async {
+            self.group.enter()
             
-            UIView.animateWithDuration(0.2, delay: 0.0, options: .CurveEaseOut, animations: {
-                // Bring the notification down
-                notificationView.frame.origin.y = 0
-                }, completion: nil)
-        })
-        
-        
-        // This is the code executed when completionhandler is called
-        var completionHandler:() -> () = {
-            
-            dispatch_async(dispatch_get_main_queue(),{
+            DispatchQueue.main.async {
                 
-                UIView.animateWithDuration(0.4, delay: 0.0, options: .CurveEaseOut, animations: {
-                    // Bring the notification up
-                    notificationView.frame.origin.y -= CGRectGetHeight(notificationView.frame)
-                    }, completion: { finished in
-                        // Remove the notification and declare oneself as free to show another notification
-                        notificationView.removeFromSuperview()
-                        self.isExecuting = false
+                rootViewController.view.addSubview(notificationView)
+                NSLayoutConstraint.activate([
+                    notificationView.leadingAnchor.constraint(equalTo: rootViewController.view.leadingAnchor),
+                    notificationView.trailingAnchor.constraint(equalTo: rootViewController.view.trailingAnchor),
+                    bottomConstraint,
+                    notificationView.heightAnchor.constraint(equalToConstant: NotificationManager.notificationHeight)
+                    ])
+                rootViewController.view.layoutIfNeeded()
+                
+                bottomConstraint.constant = NotificationManager.notificationHeight
+                UIView.animate(withDuration: 0.2, animations: {
+                    rootViewController.view.layoutIfNeeded()
+                }, completion: { (finished) in
+                    
+                    switch type{
+                    case .normal:
                         
-                        // Check if we have any notifications to show in the array
-                        if self.notificationsToShowArray.count > 0{
-                            if let notificationDictionary = self.notificationsToShowArray.firstObject as? [String:AnyObject], notificationMessage:String = notificationDictionary["message"] as? String, notificationTypeValue:Int =  notificationDictionary["typeHash"] as? Int{
-                                let notificationType:NotificationType = NotificationType(rawValue: notificationTypeValue)!
-                                self.notificationsToShowArray.removeObject(notificationDictionary)
-                                self.displayMessage(notificationMessage, type: notificationType, duration: notificationDictionary["duration"] as? Double)
-                            }
+                        bottomConstraint.constant = 0
+                        UIView.animate(withDuration: 0.8, delay: 1.6, options: UIViewAnimationOptions.curveEaseOut, animations: {
+                            rootViewController.view.layoutIfNeeded()
+                        }, completion: { (finished) in
+                            notificationView.removeFromSuperview()
+                            self.group.leave()
+                            completionHandler({})
+                        })
+                        break
+                    case .loading:
+                        
+                        let completion: notificationCompletion = {
+                            
+                            bottomConstraint.constant = 0
+                            
+                            UIView.animate(withDuration: 0.8, delay: 0, options: UIViewAnimationOptions.curveEaseOut, animations: {
+                                rootViewController.view.layoutIfNeeded()
+                            }, completion: { (finished) in
+                                notificationView.removeFromSuperview()
+                                self.group.leave()
+                            })
                         }
+                        
+                        completionHandler(completion)
+                        break
+                    }
+                    
                 })
-            })
+            }
+            
+            _ = self.group.wait(timeout: DispatchTime.distantFuture)
         }
-        
-        return completionHandler
     }
-    
 }

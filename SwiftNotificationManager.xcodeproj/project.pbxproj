@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		29CD240A1F79254E0060AE5B /* NotificationTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29CD24091F79254E0060AE5B /* NotificationTestViewController.swift */; };
+		29CD240C1F7925F10060AE5B /* Extra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29CD240B1F7925F10060AE5B /* Extra.swift */; };
 		528D0D9B1B72B80E00CFCE7F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528D0D9A1B72B80E00CFCE7F /* AppDelegate.swift */; };
-		528D0D9D1B72B80E00CFCE7F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528D0D9C1B72B80E00CFCE7F /* ViewController.swift */; };
-		528D0DA01B72B80E00CFCE7F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 528D0D9E1B72B80E00CFCE7F /* Main.storyboard */; };
 		528D0DA21B72B80E00CFCE7F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 528D0DA11B72B80E00CFCE7F /* Images.xcassets */; };
 		528D0DA51B72B80E00CFCE7F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 528D0DA31B72B80E00CFCE7F /* LaunchScreen.xib */; };
 		528D0DB11B72B80E00CFCE7F /* SwiftNotificationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528D0DB01B72B80E00CFCE7F /* SwiftNotificationManagerTests.swift */; };
@@ -28,11 +28,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		29CD24091F79254E0060AE5B /* NotificationTestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationTestViewController.swift; sourceTree = "<group>"; };
+		29CD240B1F7925F10060AE5B /* Extra.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extra.swift; sourceTree = "<group>"; };
 		528D0D951B72B80E00CFCE7F /* SwiftNotificationManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftNotificationManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		528D0D991B72B80E00CFCE7F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		528D0D9A1B72B80E00CFCE7F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		528D0D9C1B72B80E00CFCE7F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		528D0D9F1B72B80E00CFCE7F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		528D0DA11B72B80E00CFCE7F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		528D0DA41B72B80E00CFCE7F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		528D0DAA1B72B80E00CFCE7F /* SwiftNotificationManagerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftNotificationManagerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -82,12 +82,10 @@
 			isa = PBXGroup;
 			children = (
 				528D0D9A1B72B80E00CFCE7F /* AppDelegate.swift */,
-				528D0D9C1B72B80E00CFCE7F /* ViewController.swift */,
+				29CD24091F79254E0060AE5B /* NotificationTestViewController.swift */,
 				528D0DBA1B72B90900CFCE7F /* NotificationManager.swift */,
 				528D0DBB1B72B90900CFCE7F /* NotificationView.swift */,
-				528D0D9E1B72B80E00CFCE7F /* Main.storyboard */,
-				528D0DA11B72B80E00CFCE7F /* Images.xcassets */,
-				528D0DA31B72B80E00CFCE7F /* LaunchScreen.xib */,
+				29CD240B1F7925F10060AE5B /* Extra.swift */,
 				528D0D981B72B80E00CFCE7F /* Supporting Files */,
 			);
 			path = SwiftNotificationManager;
@@ -96,6 +94,8 @@
 		528D0D981B72B80E00CFCE7F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				528D0DA11B72B80E00CFCE7F /* Images.xcassets */,
+				528D0DA31B72B80E00CFCE7F /* LaunchScreen.xib */,
 				528D0D991B72B80E00CFCE7F /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -167,9 +167,11 @@
 				TargetAttributes = {
 					528D0D941B72B80E00CFCE7F = {
 						CreatedOnToolsVersion = 6.4;
+						LastSwiftMigration = 0830;
 					};
 					528D0DA91B72B80E00CFCE7F = {
 						CreatedOnToolsVersion = 6.4;
+						LastSwiftMigration = 0830;
 						TestTargetID = 528D0D941B72B80E00CFCE7F;
 					};
 				};
@@ -198,7 +200,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				528D0DA01B72B80E00CFCE7F /* Main.storyboard in Resources */,
 				528D0DA51B72B80E00CFCE7F /* LaunchScreen.xib in Resources */,
 				528D0DA21B72B80E00CFCE7F /* Images.xcassets in Resources */,
 			);
@@ -219,7 +220,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				528D0DBC1B72B90900CFCE7F /* NotificationManager.swift in Sources */,
-				528D0D9D1B72B80E00CFCE7F /* ViewController.swift in Sources */,
+				29CD240A1F79254E0060AE5B /* NotificationTestViewController.swift in Sources */,
+				29CD240C1F7925F10060AE5B /* Extra.swift in Sources */,
 				528D0D9B1B72B80E00CFCE7F /* AppDelegate.swift in Sources */,
 				528D0DBD1B72B90900CFCE7F /* NotificationView.swift in Sources */,
 			);
@@ -244,14 +246,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		528D0D9E1B72B80E00CFCE7F /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				528D0D9F1B72B80E00CFCE7F /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		528D0DA31B72B80E00CFCE7F /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -349,8 +343,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = SwiftNotificationManager/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -359,8 +355,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = SwiftNotificationManager/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -379,6 +377,7 @@
 				INFOPLIST_FILE = SwiftNotificationManagerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftNotificationManager.app/SwiftNotificationManager";
 			};
 			name = Debug;
@@ -394,6 +393,7 @@
 				INFOPLIST_FILE = SwiftNotificationManagerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftNotificationManager.app/SwiftNotificationManager";
 			};
 			name = Release;
@@ -417,6 +417,7 @@
 				528D0DB61B72B80E00CFCE7F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		528D0DB71B72B80E00CFCE7F /* Build configuration list for PBXNativeTarget "SwiftNotificationManagerTests" */ = {
 			isa = XCConfigurationList;
@@ -425,6 +426,7 @@
 				528D0DB91B72B80E00CFCE7F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
