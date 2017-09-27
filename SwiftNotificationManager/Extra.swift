@@ -21,7 +21,8 @@ extension UIColor{
         var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         
         if (cString.hasPrefix("#")) {
-            cString = cString.substring(from: cString.characters.index(cString.startIndex, offsetBy: 1))
+            let index = cString.index(cString.startIndex, offsetBy: 1)
+            cString = String(cString[index...])
         }
         
         if (cString.characters.count != 6) {
