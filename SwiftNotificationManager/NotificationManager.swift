@@ -68,7 +68,12 @@ class NotificationManager {
                     ])
                 rootViewController.view.layoutIfNeeded()
                 
-                bottomConstraint.constant = NotificationManager.notificationHeight
+                if #available(iOS 11, *) {
+                    bottomConstraint.constant = NotificationManager.notificationHeight + rootViewController.view.safeAreaInsets.top
+                } else {
+                    bottomConstraint.constant = NotificationManager.notificationHeight
+                }
+                
                 UIView.animate(withDuration: 0.2, animations: {
                     rootViewController.view.layoutIfNeeded()
                 }, completion: { (finished) in
